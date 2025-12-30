@@ -203,13 +203,19 @@
         </div>
     </nav>
 
+    <!-- 스크립트는 순서대로 로드 -->
     <script src="js/main.js"></script>
-    <script src="js/data-loader.js"></script>
     <script src="js/charts.js"></script>
+    <script src="js/data-loader.js"></script>
     <script>
+        // DOM 로드 완료 후 실행
         window.addEventListener('DOMContentLoaded', async () => {
-            await loadDashboardData();
-            await loadDashboardCharts();
+            try {
+                await loadDashboardData();
+                await loadDashboardCharts();
+            } catch (error) {
+                console.error('데이터 로드 실패:', error);
+            }
         });
     </script>
 </body>
