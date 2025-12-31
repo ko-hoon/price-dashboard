@@ -26,7 +26,7 @@ async function loadDashboardData() {
         // 금리 표시
         if (latestExchange) {
             document.getElementById("interest-rate").textContent =
-                latestExchange["금리"] + "%";
+                latestExchange["금리"];
             document.getElementById("interest-date").textContent = formatDate(
                 latestExchange["일자"]
             );
