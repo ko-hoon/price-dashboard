@@ -1,5 +1,8 @@
 // 공통 유틸리티 함수
-const BASE_PATH = '/price-dashboard'; // ← 레포 이름
+const BASE_PATH = location.hostname === 'localhost'
+    || location.hostname === '127.0.0.1'
+    ? ''
+    : '/price-dashboard';
 
 // 숫자 포맷팅 (천 단위 콤마)
 function formatNumber(num) {
