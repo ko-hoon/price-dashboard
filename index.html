@@ -9,12 +9,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
         <script src="https://d3js.org/d3.v7.min.js"></script>
         <link
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
             rel="stylesheet"
         />
         <style>
             @import url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css");
-            @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
             * {
                 font-family: "SUIT", -apple-system, BlinkMacSystemFont,
@@ -22,8 +21,8 @@
                     sans-serif;
             }
 
-            .material-symbols-rounded {
-                font-family: "Material Symbols Rounded" !important;
+            .material-icons-round {
+                font-family: "Material Icons Round";
                 font-weight: normal;
                 font-style: normal;
                 font-size: 32px;
@@ -34,10 +33,8 @@
                 white-space: nowrap;
                 word-wrap: normal;
                 direction: ltr;
+                -webkit-font-feature-settings: "liga";
                 -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-                text-rendering: optimizeLegibility;
-                font-feature-settings: "liga";
             }
 
             .card-hover {
@@ -109,7 +106,7 @@
                                 href="index.html"
                                 class="sidebar-item active flex items-center space-x-3 px-4 py-3 rounded-lg text-white"
                             >
-                                <span class="material-symbols-rounded nav-icon"
+                                <span class="material-icons-round nav-icon"
                                     >home</span
                                 >
                                 <span>종합 대시보드</span>
@@ -118,7 +115,7 @@
                                 href="pages/metals.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <span class="material-symbols-rounded nav-icon"
+                                <span class="material-icons-round nav-icon"
                                     >show_chart</span
                                 >
                                 <span>철강 가격 정보</span>
@@ -127,7 +124,7 @@
                                 href="pages/nonmetals.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <span class="material-symbols-rounded nav-icon"
+                                <span class="material-icons-round nav-icon"
                                     >factory</span
                                 >
                                 <span>비철금속 가격 정보</span>
@@ -136,7 +133,7 @@
                                 href="pages/oil.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <span class="material-symbols-rounded nav-icon"
+                                <span class="material-icons-round nav-icon"
                                     >local_gas_station</span
                                 >
                                 <span>유가 정보</span>
@@ -145,7 +142,7 @@
                                 href="pages/exchange.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <span class="material-symbols-rounded nav-icon"
+                                <span class="material-icons-round nav-icon"
                                     >payments</span
                                 >
                                 <span>금융 정보</span>
@@ -172,7 +169,7 @@
                             class="metric-card card-hover bg-blue-500 text-white col-span-2 md:col-span-2 2xl:col-span-1"
                         >
                             <div class="metric-icon-small">
-                                <span class="material-symbols-rounded"
+                                <span class="material-icons-round"
                                     >trending_up</span
                                 >
                             </div>
@@ -198,7 +195,7 @@
                             class="metric-card card-hover bg-red-500 text-white col-span-2 md:col-span-2 2xl:col-span-1"
                         >
                             <div class="metric-icon-small">
-                                <span class="material-symbols-rounded"
+                                <span class="material-icons-round"
                                     >account_balance</span
                                 >
                             </div>
@@ -228,7 +225,7 @@
                                     >전국 평균 유가 [경유] (원/L)</span
                                 >
                                 <div class="metric-icon text-orange-500">
-                                    <span class="material-symbols-rounded"
+                                    <span class="material-icons-round"
                                         >local_gas_station</span
                                     >
                                 </div>
@@ -252,8 +249,8 @@
                                     >구리(달러/톤)</span
                                 >
                                 <div class="metric-icon text-amber-600">
-                                    <span class="material-symbols-rounded"
-                                        >radio_button_unchecked</span
+                                    <span class="material-icons-round"
+                                        >circle</span
                                     >
                                 </div>
                             </div>
@@ -276,7 +273,7 @@
                                     >알루미늄(달러/톤)</span
                                 >
                                 <div class="metric-icon text-slate-400">
-                                    <span class="material-symbols-rounded"
+                                    <span class="material-icons-round"
                                         >view_in_ar</span
                                     >
                                 </div>
@@ -300,7 +297,7 @@
                                     >니켈(달러/톤)</span
                                 >
                                 <div class="metric-icon text-cyan-600">
-                                    <span class="material-symbols-rounded"
+                                    <span class="material-icons-round"
                                         >layers</span
                                     >
                                 </div>
@@ -369,37 +366,35 @@
                     href="index.html"
                     class="flex flex-col items-center py-2 text-blue-600"
                 >
-                    <span class="material-symbols-rounded">home</span>
+                    <span class="material-icons-round">home</span>
                     <span class="text-xs mt-1">홈</span>
                 </a>
                 <a
                     href="pages/metals.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <span class="material-symbols-rounded">show_chart</span>
+                    <span class="material-icons-round">show_chart</span>
                     <span class="text-xs mt-1">철강</span>
                 </a>
                 <a
                     href="pages/nonmetals.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <span class="material-symbols-rounded">factory</span>
+                    <span class="material-icons-round">factory</span>
                     <span class="text-xs mt-1">비철금속</span>
                 </a>
                 <a
                     href="pages/oil.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <span class="material-symbols-rounded"
-                        >local_gas_station</span
-                    >
+                    <span class="material-icons-round">local_gas_station</span>
                     <span class="text-xs mt-1">유가</span>
                 </a>
                 <a
                     href="pages/exchange.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <span class="material-symbols-rounded">payments</span>
+                    <span class="material-icons-round">payments</span>
                     <span class="text-xs mt-1">금융</span>
                 </a>
             </div>
