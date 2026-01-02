@@ -21,8 +21,8 @@
                     sans-serif;
             }
 
-            .material-icons-round {
-                font-family: "Material Icons Round";
+            .material-symbols-rounded {
+                font-family: "Material Symbols Rounded";
                 font-weight: normal;
                 font-style: normal;
                 font-size: 32px;
@@ -34,9 +34,10 @@
                 word-wrap: normal;
                 direction: ltr;
                 -webkit-font-feature-settings: "liga";
+                font-feature-settings: "liga";
                 -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
             }
-
             .card-hover {
                 transition: all 0.3s ease;
             }
@@ -318,7 +319,7 @@
                     <div class="grid grid-cols-1 2xl:grid-cols-5 gap-4">
                         <!-- 최근 30일 환율 추이 -->
                         <div
-                            class="bg-white rounded-lg shadow-sm p-4 2xl:col-span-3"
+                            class="bg-white rounded-lg shadow-sm p-4 order-1 2xl:col-span-3"
                         >
                             <h3
                                 class="text-lg font-semibold text-gray-800 mb-4"
@@ -331,26 +332,47 @@
                         </div>
                         <!-- 유가 지도 -->
                         <div
-                            class="bg-white rounded-lg shadow-sm p-6 2xl:col-span-2 2xl:row-span-2"
+                            class="bg-white rounded-lg shadow-sm p-6 order-3 order-3 2xl:order-2 2xl:col-span-2 2xl:row-span-2"
                         >
                             <h3
                                 class="text-lg font-semibold text-gray-800 mb-4"
                             >
-                                유가 지도
+                                시도별 유가 현황
                             </h3>
-                            <div style="height: 240px">
-                                <canvas id="metalTrendChart"></canvas>
+                            <div id="oil-map" class="w-full"></div>
+                            <div
+                                class="mt-4 flex items-center justify-center gap-4 text-xs"
+                            >
+                                <div class="flex items-center gap-1">
+                                    <div class="w-4 h-4 bg-red-600"></div>
+                                    <span>-1% 이하</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <div class="w-4 h-4 bg-red-300"></div>
+                                    <span>-1% ~ 0%</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <div class="w-4 h-4 bg-blue-300"></div>
+                                    <span>0% ~ 1%</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <div class="w-4 h-4 bg-blue-600"></div>
+                                    <span>1% 이상</span>
+                                </div>
                             </div>
                         </div>
                         <!-- 최근 3개월 철강 가격 변화 -->
                         <div
-                            class="bg-white rounded-lg shadow-sm p-6 2xl:col-span-3"
+                            class="bg-white rounded-lg shadow-sm p-6 order-2 2xl:order-3 2xl:col-span-3"
                         >
                             <h3
                                 class="text-lg font-semibold text-gray-800 mb-4"
                             >
                                 최근 3개월 철강 가격 변화
                             </h3>
+                            <div style="height: 240px">
+                                <canvas id="metalTrendChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -404,12 +426,14 @@
         <script src="js/main.js"></script>
         <script src="js/charts.js"></script>
         <script src="js/data-loader.js"></script>
+        <script src="js/maps.js"></script>
         <script>
             // DOM 로드 완료 후 실행
             window.addEventListener("DOMContentLoaded", async () => {
                 try {
                     await loadDashboardData();
                     await loadDashboardCharts();
+                    await drawOilMap();
                 } catch (error) {
                     console.error("데이터 로드 실패:", error);
                 }
