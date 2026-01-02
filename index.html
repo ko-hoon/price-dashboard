@@ -67,12 +67,11 @@
             }
 
             .metric-icon {
-                width: 32px;
-                height: 32px;
+                width: 28px;
+                height: 28px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 12px;
             }
 
             .material-symbols-rounded {
@@ -135,8 +134,8 @@
             </aside>
 
             <!-- 메인 컨텐츠 -->
-            <main class="flex-1 overflow-y-auto pb-20 md:pb-0">
-                <div class="p-4 md:p-6">
+            <main class="flex-1 overflow-y-auto pb-20 2xl:pb-0">
+                <div class="p-4">
                     <div
                         class="pb-4 px-4 text-gray-800 text-sm font-semibold flex justify-end items-center"
                     >
@@ -181,25 +180,32 @@
                                     >account_balance</span
                                 >
                             </div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm font-medium">KORIBOR</span>
-                            </div>
-                            <div
-                                class="text-2xl font-bold"
-                                id="koribor-rate"
-                            ></div>
-                            <div class="text-xs mt-2" id="koribor-date"></div>
-                        </div>
 
-                        <!-- 유가 -->
+                            <div class="flex items-end gap-1">
+                                <span
+                                    class="text-4xl font-bold"
+                                    id="koribor-rate"
+                                ></span>
+                                <span class="text-sm font-semibold">%</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-3">
+                                <span class="text-base font-medium"
+                                    >KORIBOR</span
+                                >
+                            </div>
+                            <div class="text-[11px] mt-2">
+                                갱신일 :
+                                <span id="koribor-date">-</span>
+                            </div>
+                        </div>
+                        <!-- 유가 카드 -->
                         <div class="metric-card card-hover col-span-2">
                             <div class="flex items-center justify-between mb-3">
-                                <span class="text-gray-500 text-sm font-medium"
-                                    >유가</span
+                                <span
+                                    class="text-gray-500 text-base font-medium"
+                                    >전국 평균 유가 [경유] (원/L)</span
                                 >
-                                <div
-                                    class="metric-icon bg-orange-100 text-orange-600"
-                                >
+                                <div class="metric-icon text-orange-500">
                                     <span class="material-symbols-rounded"
                                         >local_gas_station</span
                                     >
@@ -211,23 +217,19 @@
                             >
                                 -
                             </div>
-                            <div
-                                class="text-xs text-gray-400 mt-2"
-                                id="oil-date"
-                            >
-                                -
+                            <div class="mt-3" style="height: 80px">
+                                <canvas id="oil-mini-chart"></canvas>
                             </div>
                         </div>
 
-                        <!-- 구리 -->
+                        <!-- 구리 카드 -->
                         <div class="metric-card card-hover col-span-2">
                             <div class="flex items-center justify-between mb-3">
-                                <span class="text-gray-500 text-sm font-medium"
-                                    >구리 (달러/톤)</span
+                                <span
+                                    class="text-gray-500 text-base font-medium"
+                                    >구리(달러/톤)</span
                                 >
-                                <div
-                                    class="metric-icon bg-amber-100 text-amber-600"
-                                >
+                                <div class="metric-icon text-amber-600">
                                     <span class="material-symbols-rounded"
                                         >radio_button_unchecked</span
                                     >
@@ -239,22 +241,19 @@
                             >
                                 -
                             </div>
-                            <div
-                                class="text-xs text-gray-400 mt-2"
-                                id="copper-date"
-                            >
-                                -
+                            <div class="mt-3" style="height: 80px">
+                                <canvas id="copper-mini-chart"></canvas>
                             </div>
                         </div>
-                        <!-- 유가 -->
+
+                        <!-- 알루미늄 카드 -->
                         <div class="metric-card card-hover col-span-2">
                             <div class="flex items-center justify-between mb-3">
-                                <span class="text-gray-500 text-sm font-medium"
-                                    >전국 평균 유가</span
+                                <span
+                                    class="text-gray-500 text-base font-medium"
+                                    >알루미늄(달러/톤)</span
                                 >
-                                <div
-                                    class="metric-icon bg-orange-100 text-orange-600"
-                                >
+                                <div class="metric-icon text-slate-400">
                                     <span class="material-symbols-rounded"
                                         >view_in_ar</span
                                     >
@@ -262,27 +261,23 @@
                             </div>
                             <div
                                 class="text-2xl font-bold text-gray-800"
-                                id="oil-price"
+                                id="aluminum-price"
                             >
                                 -
                             </div>
-                            <div
-                                class="text-xs text-gray-400 mt-2"
-                                id="oil-date"
-                            >
-                                -
+                            <div class="mt-3" style="height: 80px">
+                                <canvas id="aluminum-mini-chart"></canvas>
                             </div>
                         </div>
 
-                        <!-- 구리 -->
+                        <!-- 니켈 카드 -->
                         <div class="metric-card card-hover col-span-2">
                             <div class="flex items-center justify-between mb-3">
-                                <span class="text-gray-500 text-sm font-medium"
-                                    >구리 (달러/톤)</span
+                                <span
+                                    class="text-gray-500 text-base font-medium"
+                                    >니켈(달러/톤)</span
                                 >
-                                <div
-                                    class="metric-icon bg-amber-100 text-amber-600"
-                                >
+                                <div class="metric-icon text-cyan-600">
                                     <span class="material-symbols-rounded"
                                         >layers</span
                                     >
@@ -290,15 +285,12 @@
                             </div>
                             <div
                                 class="text-2xl font-bold text-gray-800"
-                                id="copper-price"
+                                id="nickel-price"
                             >
                                 -
                             </div>
-                            <div
-                                class="text-xs text-gray-400 mt-2"
-                                id="copper-date"
-                            >
-                                -
+                            <div class="mt-3" style="height: 80px">
+                                <canvas id="nickel-mini-chart"></canvas>
                             </div>
                         </div>
                     </div>
