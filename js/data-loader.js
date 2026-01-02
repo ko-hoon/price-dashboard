@@ -322,7 +322,7 @@ function calculateDailyChanges(data, dateField, valueField, days = 30) {
 }
 
 // 미니 차트 생성 (카드 내부용)
-function createMiniChart(canvasId, changes, color = "#3B82F6") {
+function createMiniChart(canvasId, changes, color = "rgba(36, 99, 235, 1)") {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
