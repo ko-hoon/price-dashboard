@@ -9,10 +9,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
         <script src="https://d3js.org/d3.v7.min.js"></script>
         <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        />
-        <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
             rel="stylesheet"
         />
@@ -77,17 +73,14 @@
             .material-symbols-rounded {
                 font-size: 32px;
                 line-height: 1;
-                display: inline-block;
-                width: 1em;
-                height: 1em;
-                overflow: hidden;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 white-space: nowrap;
-                word-wrap: normal;
-                direction: ltr;
-                -webkit-font-smoothing: antialiased;
-                text-rendering: optimizeLegibility;
-                -moz-osx-font-smoothing: grayscale;
-                font-feature-settings: "liga";
+            }
+
+            .nav-icon {
+                font-size: 24px !important;
             }
         </style>
     </head>
@@ -109,35 +102,45 @@
                                 href="index.html"
                                 class="sidebar-item active flex items-center space-x-3 px-4 py-3 rounded-lg text-white"
                             >
-                                <i class="fas fa-home w-5"></i>
+                                <span class="material-symbols-rounded nav-icon"
+                                    >home</span
+                                >
                                 <span>종합 대시보드</span>
                             </a>
                             <a
                                 href="pages/metals.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <i class="fas fa-chart-line w-5"></i>
+                                <span class="material-symbols-rounded nav-icon"
+                                    >show_chart</span
+                                >
                                 <span>철강 가격 정보</span>
                             </a>
                             <a
                                 href="pages/nonmetals.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <i class="fas fa-industry w-5"></i>
+                                <span class="material-symbols-rounded nav-icon"
+                                    >factory</span
+                                >
                                 <span>비철금속 가격 정보</span>
                             </a>
                             <a
                                 href="pages/oil.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <i class="fas fa-gas-pump w-5"></i>
+                                <span class="material-symbols-rounded nav-icon"
+                                    >local_gas_station</span
+                                >
                                 <span>유가 정보</span>
                             </a>
                             <a
                                 href="pages/exchange.html"
                                 class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
                             >
-                                <i class="fas fa-dollar-sign w-5"></i>
+                                <span class="material-symbols-rounded nav-icon"
+                                    >payments</span
+                                >
                                 <span>금융 정보</span>
                             </a>
                         </nav>
@@ -359,36 +362,38 @@
                     href="index.html"
                     class="flex flex-col items-center py-2 text-blue-600"
                 >
-                    <i class="fas fa-home text-xl"></i
-                    ><span class="text-xs mt-1">홈</span>
+                    <span class="material-symbols-rounded">home</span>
+                    <span class="text-xs mt-1">홈</span>
                 </a>
                 <a
                     href="pages/metals.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-chart-line text-xl"></i
-                    ><span class="text-xs mt-1">철강</span>
+                    <span class="material-symbols-rounded">show_chart</span>
+                    <span class="text-xs mt-1">철강</span>
                 </a>
                 <a
                     href="pages/nonmetals.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-industry text-xl"></i
-                    ><span class="text-xs mt-1">비철금속</span>
+                    <span class="material-symbols-rounded">factory</span>
+                    <span class="text-xs mt-1">비철금속</span>
                 </a>
                 <a
                     href="pages/oil.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-gas-pump text-xl"></i
-                    ><span class="text-xs mt-1">유가</span>
+                    <span class="material-symbols-rounded"
+                        >local_gas_station</span
+                    >
+                    <span class="text-xs mt-1">유가</span>
                 </a>
                 <a
                     href="pages/exchange.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-dollar-sign text-xl"></i
-                    ><span class="text-xs mt-1">금융</span>
+                    <span class="material-symbols-rounded">payments</span>
+                    <span class="text-xs mt-1">금융</span>
                 </a>
             </div>
         </nav>
