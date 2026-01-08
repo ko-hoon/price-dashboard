@@ -136,29 +136,43 @@ async function loadDashboardCharts() {
             loadCSV("monthly_metal_data.csv"),
         ]);
 
-        // 최근 30일 환율 데이터
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 30);
-        const recentExchange = filterDataByDateRange(
-            exchangeData,
-            startDate,
-            endDate,
-            "일자"
-        );
+        // 1. 환율 데이터 처리: 데이터의 마지막 날짜 기준
+        if (exchangeData && exchangeData.length > 0) {
+            // 데이터의 가장 마지막(최신) 날짜 추출
+            const latestExDate = new Date(
+                exchangeData[exchangeData.length - 1]["일자"]
+            );
+            const startExDate = new Date(latestExDate);
+            startExDate.setDate(startExDate.getDate() - 30); // 최신일로부터 30일 전
 
-        // 최근 3개월 철강 데이터
-        const threeMonthsAgo = new Date();
-        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-        const recentMetal = filterDataByDateRange(
-            metalData,
-            threeMonthsAgo,
-            endDate,
-            "날짜"
-        );
+            const recentExchange = filterDataByDateRange(
+                exchangeData,
+                startExDate,
+                latestExDate,
+                "일자"
+            );
+            createDashboardExchangeChart(recentExchange);
+        }
 
-        createDashboardExchangeChart(recentExchange);
-        createDashboardMetalChart(recentMetal);
+        // 2. 철강 데이터 처리: 데이터의 마지막 날짜 기준
+        if (metalData && metalData.length > 0) {
+            // 데이터의 가장 마지막(최신) 날짜 추출
+            const latestMetalDate = new Date(
+                metalData[metalData.length - 1]["날짜"]
+            );
+            const startMetalDate = new Date(latestMetalDate);
+            startMetalDate.setMonth(startMetalDate.getMonth() - 2); // 최신일로부터 3개월 전
+
+            const recentMetal = filterDataByDateRange(
+                metalData,
+                startMetalDate,
+                latestMetalDate,
+                "날짜"
+            );
+
+            console.log("필터링된 철강 데이터:", recentMetal);
+            createDashboardMetalChart(recentMetal);
+        }
     } catch (error) {
         console.error("대시보드 차트 로드 실패:", error);
     }
@@ -322,7 +336,7 @@ function calculateDailyChanges(data, dateField, valueField, days = 30) {
 }
 
 // 미니 차트 생성 (카드 내부용)
-function createMiniChart(canvasId, changes, color = "rgba(36, 99, 235, 1)") {
+function createMiniChart(canvasId, changes, color = "rgba(59, 130, 246, 1)") {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
@@ -347,10 +361,14 @@ function createMiniChart(canvasId, changes, color = "rgba(36, 99, 235, 1)") {
                     pointRadius: 1,
                     pointHoverRadius: 3,
                     pointBackgroundColor: data.map((val) =>
-                        val >= 0 ? "rgba(36,99,235,0.8)" : "rgba(235,30,45,0.8)"
+                        val >= 0
+                            ? "rgba(59, 130, 246,0.8)"
+                            : "rgba(239, 68, 68, 0.8)"
                     ),
                     pointBorderColor: data.map((val) =>
-                        val >= 0 ? "rgba(36,99,235,1)" : "rgba(235,30,45,1)"
+                        val >= 0
+                            ? "rgba(59, 130, 246,1)"
+                            : "rgba(239, 68, 68, 1)"
                     ),
                     pointBorderWidth: 0,
                     tension: 0.3,
@@ -359,8 +377,8 @@ function createMiniChart(canvasId, changes, color = "rgba(36, 99, 235, 1)") {
                         borderColor: (ctx) => {
                             const value = ctx.p1.parsed.y;
                             return value >= 0
-                                ? "rgba(36,99,235,1)"
-                                : "rgba(235,30,45,1)";
+                                ? "rgba(59, 130, 246,1)"
+                                : "rgba(239, 68, 68, 1)";
                         },
                     },
                 },

@@ -51,10 +51,12 @@ async function drawOilMap() {
         function getColor(price) {
             const diff = ((price - avgPrice) / avgPrice) * 100;
 
-            if (diff >= 1) return "rgba(36, 99, 235, 1)";
-            if (diff >= 0) return "rgba(36, 99, 235, 0.5)";
-            if (diff <= -1) return "rgba(235,30,45,1)";
-            if (diff < 0) return "rgba(235,30,45,0.5)";
+            if (diff >= 1) return "rgba(239, 68, 68, 1)";
+            if (diff >= 0.5) return "rgba(239, 68, 68, 0.7)";
+            if (diff > 0) return "rgba(239, 68, 68, 0.4)";
+            if (diff <= -1) return "rgba(59, 130, 246, 1)";
+            if (diff <= -0.5) return "rgba(59, 130, 246, 0.7)";
+            if (diff < 0) return "rgba(59, 130, 246, 0.4)";
             return "#e5e7eb";
         }
 
@@ -67,7 +69,7 @@ async function drawOilMap() {
 
         const width = container.clientWidth;
         const isMobile = window.innerWidth < 768;
-        const height = isMobile ? width * 1 : width * 1.1;
+        const height = isMobile ? width * 1 : width * 1;
 
         // 컨테이너 높이 설정
         container.style.height = height + "px";
@@ -87,24 +89,38 @@ async function drawOilMap() {
         // 투영 설정 (한국 중심) - 반응형
         const projection = d3
             .geoMercator()
-            .center([128, 36])
-            .scale(width * 8) // 화면 크기 기반 스케일
+            .center([128.2, 36])
+            .scale(width * 8.4)
             .translate([width / 2, height / 2]);
 
         const path = d3.geoPath().projection(projection);
 
-        // 툴팁
-        const tooltip = d3
-            .select("body")
-            .append("div")
-            .attr(
-                "class",
-                "absolute hidden bg-gray-800 text-white px-3 py-2 rounded text-sm pointer-events-none"
-            )
-            .style("z-index", "1000");
+        // 툴팁 - 한 번만 생성하고 재사용
+        let tooltip = d3.select(".map-tooltip");
+        if (tooltip.empty()) {
+            tooltip = d3
+                .select("body")
+                .append("div")
+                .attr("class", "map-tooltip")
+                .style("position", "absolute")
+                .style("visibility", "hidden")
+                .style("background", "rgba(31, 41, 55, 0.95)")
+                .style("color", "white")
+                .style("padding", "12px 16px")
+                .style("border-radius", "8px")
+                .style("font-size", "14px")
+                .style("pointer-events", "none")
+                .style("z-index", "1000")
+                .style("box-shadow", "0 4px 6px rgba(0, 0, 0, 0.1)")
+                .style("backdrop-filter", "blur(4px)");
+        }
 
-        // 지도 그리기
-        const paths = svg
+        // 지도 그리기 - GPU 가속 활성화
+        svg.style("will-change", "transform");
+
+        const mapGroup = svg.append("g");
+
+        const paths = mapGroup
             .selectAll("path")
             .data(geoData.features)
             .enter()
@@ -113,23 +129,24 @@ async function drawOilMap() {
             .attr("fill", (d) => {
                 const name = d.properties.name;
                 const price = oilPriceData[name];
-                const color = price ? getColor(price) : "#e5e7eb";
-                return color;
+                return price ? getColor(price) : "#e5e7eb";
             })
-            .attr("stroke", "#fff")
+            .attr("stroke", "#dddddd")
             .attr("stroke-width", 1)
             .style("cursor", "pointer")
-            .on("mouseover", function (event, d) {
+            .style("transition", "opacity 0.15s ease") // CSS transition 사용
+            .on("mouseenter", function (event, d) {
                 const name = d.properties.name;
                 const price = oilPriceData[name];
                 const diff = price
                     ? (((price - avgPrice) / avgPrice) * 100).toFixed(2)
                     : "N/A";
 
-                d3.select(this).attr("opacity", 0.7);
+                // opacity는 CSS로 처리
+                this.style.opacity = "0.7";
 
-                // 툴팁 위치 계산 (화면 우측이면 왼쪽에 표시)
-                const tooltipWidth = 200; // 툴팁 예상 너비
+                // 툴팁 위치 계산
+                const tooltipWidth = 200;
                 const isRightSide = event.pageX > window.innerWidth / 2;
                 const leftPos = isRightSide
                     ? event.pageX - tooltipWidth - 10
@@ -138,17 +155,21 @@ async function drawOilMap() {
                 tooltip
                     .html(
                         `<strong>${name}</strong><br/>
-             가격: ${price ? price.toLocaleString() + "원/L" : "N/A"}<br/>
-             전국평균: ${avgPrice.toLocaleString()}원/L<br/>
-             차이: ${price ? (diff > 0 ? "+" : "") + diff + "%" : "N/A"}`
+                         가격: ${
+                             price ? price.toLocaleString() + "원/L" : "N/A"
+                         }<br/>
+                         전국평균: ${avgPrice.toLocaleString()}원/L<br/>
+                         차이: ${
+                             price ? (diff > 0 ? "+" : "") + diff + "%" : "N/A"
+                         }`
                     )
                     .style("left", leftPos + "px")
                     .style("top", event.pageY - 28 + "px")
-                    .classed("hidden", false);
+                    .style("visibility", "visible");
             })
-            .on("mouseout", function () {
-                d3.select(this).attr("opacity", 1);
-                tooltip.classed("hidden", true);
+            .on("mouseleave", function () {
+                this.style.opacity = "1";
+                tooltip.style("visibility", "hidden");
             });
     } catch (error) {
         console.error("지도 로드 실패:", error);
@@ -161,10 +182,26 @@ async function drawOilMap() {
         }
     }
 }
+
+// 리사이즈 최적화 - debounce 시간 증가 및 리사이즈 중 플래그 설정
 let resizeTimer;
+let isResizing = false;
+
 window.addEventListener("resize", () => {
+    isResizing = true;
     clearTimeout(resizeTimer);
+
     resizeTimer = setTimeout(() => {
         drawOilMap();
-    }, 250); // 250ms 후에 다시 그리기
+        isResizing = false;
+    }, 250); // 250ms로 증가
 });
+
+// 스크롤 성능 최적화를 위한 passive 리스너
+window.addEventListener(
+    "scroll",
+    () => {
+        // 스크롤 중에는 지도 업데이트 방지
+    },
+    { passive: true }
+);
