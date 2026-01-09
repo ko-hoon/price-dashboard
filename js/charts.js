@@ -428,20 +428,25 @@ function createNonMetalTable(data) {
     const tableContainer = document.getElementById("nonmetal-table");
     if (!tableContainer) return;
 
-    const recentData = data.slice(-10).reverse();
+    const recentData = data.reverse();
 
     let html = `
+    
         <div class="overflow-x-auto">
+            
+            <div class="text-right">
+                <small class="text-gray-600 text-xs md:text-base italic">단위: 철근(천원/톤), 철근 외(달러/톤)</small>
+            </div>
             <table class="min-w-full bg-white border border-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">날짜</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">구리</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">알루미늄</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">아연</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">납</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">니켈</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">주석</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-blue-600">날짜</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">구리</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">알루미늄</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">아연</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">납</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">니켈</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">주석</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -450,27 +455,27 @@ function createNonMetalTable(data) {
     recentData.forEach((row) => {
         html += `
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-3 text-sm text-gray-900">${formatDate(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatDate(
                     row["일자"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["구리 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["알루미늄 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["아연 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["납 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["니켈 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["주석 (달러/톤)"]
-                )}</td>
+                )}</td> 
             </tr>
         `;
     });
