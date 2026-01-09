@@ -208,7 +208,7 @@ function checkSheetJSLibrary() {
         console.error("SheetJS 라이브러리가 로드되지 않았습니다.");
         console.log("다음 스크립트를 HTML에 추가하세요:");
         console.log(
-            '<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>'
+            '<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.min.js"></script>'
         );
         return false;
     }
