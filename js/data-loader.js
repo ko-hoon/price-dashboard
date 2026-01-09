@@ -169,8 +169,6 @@ async function loadDashboardCharts() {
                 latestMetalDate,
                 "날짜"
             );
-
-            console.log("필터링된 철강 데이터:", recentMetal);
             createDashboardMetalChart(recentMetal);
         }
     } catch (error) {

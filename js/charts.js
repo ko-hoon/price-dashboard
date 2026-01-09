@@ -145,36 +145,52 @@ function createMetalChart(data) {
             labels: labels,
             datasets: [
                 {
-                    label: "철근 (천원/톤)",
+                    label: "철근",
                     data: data.map((row) => row["철근 (천원/톤)"]),
                     borderColor: "rgba(59, 130, 246, 1)",
                     backgroundColor: "rgba(59, 130, 246, 0.1)",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
                 {
-                    label: "철광석 (달러/톤)",
+                    label: "철광석",
                     data: data.map((row) => row["철광석 (달러/톤)"]),
                     borderColor: "#10b981",
                     backgroundColor: "rgba(16, 185, 129, 0.1)",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
                 {
-                    label: "유연탄 (달러/톤)",
+                    label: "유연탄",
                     data: data.map((row) => row["유연탄 (달러/톤)"]),
                     borderColor: "#f59e0b",
                     backgroundColor: "rgba(245, 158, 11, 0.1)",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
                 {
-                    label: "스크랩 (달러/톤)",
+                    label: "스크랩",
                     data: data.map((row) => row["스크랩 (달러/톤)"]),
-                    borderColor: "#ef4444",
+                    borderColor: "rgba(239, 68, 68, 1)",
                     backgroundColor: "rgba(239, 68, 68, 0.1)",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
             ],
         },
-        options: getChartOptions("철강 원자재 가격 추이", "가격"),
+        options: getChartOptions("가격"),
     });
 }
 
@@ -230,7 +246,7 @@ function createNonMetalChart(data) {
                 },
             ],
         },
-        options: getChartOptions("비철금속 가격 추이 (최근 30일)", "달러/톤"),
+        options: getChartOptions("달러/톤"),
     });
 }
 
@@ -266,7 +282,7 @@ function createOilChart(data) {
                 borderWidth: region === "전국" ? 3 : 2,
             })),
         },
-        options: getChartOptions("지역별 경유 가격 추이 (최근 30일)", "원/L"),
+        options: getChartOptions("원/L"),
     });
 }
 
@@ -356,18 +372,22 @@ function createMetalTable(data) {
     if (!tableContainer) return;
 
     // 최근 10개 데이터만 표시
-    const recentData = data.slice(-10).reverse();
+    const recentData = data.reverse();
 
     let html = `
         <div class="overflow-x-auto">
+            
+            <div class="text-right">
+                <small class="text-gray-600 text-xs md:text-base italic">단위: 철근(천원/톤), 철근 외(달러/톤)</small>
+            </div>
             <table class="min-w-full bg-white border border-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">날짜</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">철근</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">철광석</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">유연탄</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">스크랩</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-blue-600">날짜</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">철근</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">철광석</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">유연탄</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-base font-medium text-gray-600">스크랩</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -376,19 +396,19 @@ function createMetalTable(data) {
     recentData.forEach((row) => {
         html += `
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-3 text-sm text-gray-900">${formatDate(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatDate(
                     row["날짜"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["철근 (천원/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["철광석 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["유연탄 (달러/톤)"]
                 )}</td>
-                <td class="px-4 py-3 text-sm text-right text-gray-700">${formatNumber(
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-base text-center text-gray-900">${formatNumber(
                     row["스크랩 (달러/톤)"]
                 )}</td>
             </tr>

@@ -102,19 +102,11 @@ const CHART_COLORS = {
 };
 
 // 차트 기본 옵션
-function getChartOptions(title, yAxisLabel) {
+function getChartOptions(yAxisLabel) {
     return {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            title: {
-                display: true,
-                text: title,
-                font: {
-                    size: 16,
-                    weight: "bold",
-                },
-            },
             legend: {
                 position: "bottom",
                 labels: {
@@ -133,13 +125,19 @@ function getChartOptions(title, yAxisLabel) {
             y: {
                 beginAtZero: false,
                 title: {
-                    display: true,
+                    display: false,
                     text: yAxisLabel,
                 },
             },
             x: {
                 title: {
                     display: false,
+                },
+                ticks: {
+                    maxRotation: 0,
+                    minRotation: 0,
+                    autoSkip: true,
+                    autoSkipPadding: 20,
                 },
             },
         },
@@ -166,35 +164,6 @@ function showError(elementId, message) {
     if (element) {
         element.innerHTML = `<div class="text-center text-red-500 p-4">${message}</div>`;
     }
-}
-
-// 데이터 다운로드
-async function downloadDataAsExcel() {
-    const files = [
-        "monthly_metal_data.csv",
-        "daily_no_metal_data.csv",
-        "daily_oil_data.csv",
-        "dollar_won_rate_data.csv",
-    ];
-
-    const workbook = XLSX.utils.book_new();
-
-    for (const file of files) {
-        const response = await fetch(`${BASE_PATH}/data/${file}`);
-        const text = await response.text();
-
-        const parsed = Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-        });
-
-        const worksheet = XLSX.utils.json_to_sheet(parsed.data);
-
-        const sheetName = file.replace(".csv", "");
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    }
-
-    XLSX.writeFile(workbook, "원자재_가격_데이터.xlsx");
 }
 
 // 모바일 체크
