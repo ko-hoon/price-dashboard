@@ -3,14 +3,14 @@ class DateRangeFilter {
     constructor(containerId, options = {}) {
         this.containerId = containerId;
         this.options = {
-            defaultRange: options.defaultRange || "3M", // '1M', '3M', '6M', '1Y', 'ALL'
+            defaultRange: options.defaultRange || "1Y", // '1M', '3M', '6M', '1Y', 'ALL'
             dataEndDate: options.dataEndDate || null, // 데이터의 최신 날짜 (있으면 이 날짜 기준으로 계산)
             onFilter: options.onFilter || (() => {}),
             customRanges: options.customRanges || {
-                "1M": { label: "1개월", months: 1 },
                 "3M": { label: "3개월", months: 3 },
                 "6M": { label: "6개월", months: 6 },
                 "1Y": { label: "1년", months: 12 },
+                "3Y": { label: "3년", months: 36 },
                 ALL: { label: "전체", months: null },
             },
         };

@@ -285,7 +285,7 @@
 
                 // 날짜 필터 초기화
                 dateFilter = new DateRangeFilter("metal-date-filter", {
-                    defaultRange: "3M",
+                    defaultRange: "1Y",
                     onFilter: (dateRange) => {
                         console.log("필터 변경:", dateRange);
                         updateMetalDisplay(dateRange);
