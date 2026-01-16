@@ -9,18 +9,11 @@ from bs4 import BeautifulSoup
 import re
 
 # 환경 변수에서 API 키 가져오기
-# KOREA_BANK_API_KEY = os.getenv("KOREA_BANK_API_KEY")
-# OPINET_API_KEY = os.getenv("OPINET_API_KEY")
-# PUBLIC_DATA_CENTER_API_KEY = os.getenv("PUBLIC_DATA_CENTER_API_KEY")
-# LME_PRICE_BOARD_URL = os.getenv("LME_PRICE_BOARD_URL")
-# LME_PRICE_LIST_URL = os.getenv("LME_PRICE_LIST_URL")
-
-KOREA_BANK_API_KEY = "VH5HVPX7V38DUY6Y35OZ"
-OPINET_API_KEY = "F260116063"
-PUBLIC_DATA_CENTER_API_KEY = "OOCJbRX4ng%2FOUZs9PphW5mStymTHtN%2BmQp6gdj3OIDrl3jdYADTKdjm%2BhFLD%2FE2bhrkIoubjnnS8nJoA9P44NQ%3D%3D"
-LME_PRICE_BOARD_URL = "https://www.pps.go.kr/bichuk/bbs/list.do"
-LME_PRICE_LIST_URL = "https://www.pps.go.kr/bichuk/bbs/view.do"
-
+KOREA_BANK_API_KEY = os.getenv("KOREA_BANK_API_KEY")
+OPINET_API_KEY = os.getenv("OPINET_API_KEY")
+PUBLIC_DATA_CENTER_API_KEY = os.getenv("PUBLIC_DATA_CENTER_API_KEY")
+LME_PRICE_BOARD_URL = os.getenv("LME_PRICE_BOARD_URL")
+LME_PRICE_LIST_URL = os.getenv("LME_PRICE_LIST_URL")
 
 
 # 중복이 아니면 True, 중복값이면 False 반환
@@ -335,12 +328,7 @@ def main():
             data["dollar_won_rate"],
             formatted_today,
         )
-    print("check")
-    print(write_file_path)
-    print(oil_price_filename)
-    print(formatted_today)
     if date_today_duplicate_check(write_file_path, oil_price_filename, formatted_today):
-        print("check")
         opinet_oil(
             write_file_path, oil_price_filename, data["oil_price"], formatted_today
         )
