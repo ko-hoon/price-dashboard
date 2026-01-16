@@ -2,38 +2,6 @@
 
 let chartInstances = {};
 
-// 모바일 기기 감지
-const isMobile =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-    );
-
-// 모바일 툴팁 제어를 위한 전역 이벤트 리스너 (한 번만 등록)
-if (isMobile) {
-    document.addEventListener(
-        "touchstart",
-        function (e) {
-            // 모든 차트 인스턴스를 순회하며 체크
-            Object.keys(chartInstances).forEach((chartId) => {
-                const chartElement = document.getElementById(chartId);
-                const chart = chartInstances[chartId];
-
-                // 터치한 곳이 해당 차트 외부이고, 차트가 존재하면 툴팁 숨김
-                if (
-                    chartElement &&
-                    !chartElement.contains(e.target) &&
-                    chart &&
-                    chart.tooltip
-                ) {
-                    chart.tooltip.setActiveElements([], { x: 0, y: 0 });
-                    chart.update("none");
-                }
-            });
-        },
-        { passive: true }
-    );
-}
-
 // 기존 차트 제거
 function destroyChart(chartId) {
     if (chartInstances[chartId]) {
