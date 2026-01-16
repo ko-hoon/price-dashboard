@@ -46,13 +46,8 @@ jobs:
                   git add .
                   echo "::set-output name=changes::$(git status --porcelain)"
 
-            - name: Trigger html Build and Deploy
-              if: always()
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Commit and push if changes
+              if: steps.git-status.outputs.changes != ''
               run: |
-                  curl -X POST \
-                    -H "Accept: application/vnd.github.v3+json" \
-                    -H "Authorization: token $GITHUB_TOKEN" \
-                    https://api.github.com/repos/${{ github.repository }}/actions/workflows/workflow.yml/dispatches \
-                    -d '{"ref":"main"}'
+                  git commit -m "Update data from collector script [skip ci]"
+                  git push
