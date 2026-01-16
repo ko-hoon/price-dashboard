@@ -32,7 +32,7 @@ jobs:
                   LME_PRICE_BOARD_URL: ${{ secrets.LME_PRICE_BOARD_URL }}
                   LME_PRICE_LIST_URL: ${{ secrets.LME_PRICE_LIST_URL }}
               run: |
-                  python your_script_name.py
+                  python collector.py
 
             - name: Commit and push if changes
               run: |
