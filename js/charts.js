@@ -222,6 +222,7 @@ function createNonMetalChart(data) {
                     label: "알루미늄 (달러/톤)",
                     data: data.map((row) => row["알루미늄 (달러/톤)"]),
                     borderColor: CHART_COLORS.aluminum,
+                    yAxisID: "y1",
                     borderWidth: 2,
                     pointRadius: 1,
                     pointBorderWidth: 0,
@@ -232,6 +233,7 @@ function createNonMetalChart(data) {
                     label: "아연 (달러/톤)",
                     data: data.map((row) => row["아연 (달러/톤)"]),
                     borderColor: CHART_COLORS.zinc,
+                    yAxisID: "y1",
                     borderWidth: 2,
                     pointRadius: 1,
                     pointBorderWidth: 0,
@@ -242,6 +244,7 @@ function createNonMetalChart(data) {
                     label: "납 (달러/톤)",
                     data: data.map((row) => row["납 (달러/톤)"]),
                     borderColor: CHART_COLORS.lead,
+                    yAxisID: "y1",
                     borderWidth: 2,
                     pointRadius: 1,
                     pointBorderWidth: 0,
@@ -273,8 +276,7 @@ function createNonMetalChart(data) {
         options: getChartOptions("달러/톤"),
     });
 }
-
-// 유가 차트
+// 유가 차트 - 전체 지역 표시
 function createOilChart(data) {
     destroyChart("oilChart");
 
@@ -283,15 +285,48 @@ function createOilChart(data) {
 
     const labels = data.map((row) => formatDate(row["일자"]));
 
-    // 주요 지역만 표시
-    const regions = ["전국", "서울", "경기", "부산", "대구", "인천"];
+    // 전체 18개 지역
+    const regions = [
+        "전국",
+        "서울",
+        "경기",
+        "인천",
+        "강원",
+        "충북",
+        "충남",
+        "전북",
+        "전남",
+        "경북",
+        "경남",
+        "세종",
+        "대전",
+        "대구",
+        "부산",
+        "광주",
+        "울산",
+        "제주",
+    ];
+
+    // 18개 지역을 위한 구분 가능한 색상 팔레트
     const colors = [
-        "#667eea",
-        "#3b82f6",
-        "#10b981",
-        "#f59e0b",
-        "#ef4444",
-        "#8b5cf6",
+        "#667eea", // 전국 - 보라
+        "#3b82f6", // 서울 - 파랑
+        "#10b981", // 경기 - 초록
+        "#f59e0b", // 인천 - 주황
+        "#ef4444", // 강원 - 빨강
+        "#8b5cf6", // 충북 - 자주
+        "#06b6d4", // 충남 - 청록
+        "#ec4899", // 전북 - 핑크
+        "#14b8a6", // 전남 - 틸
+        "#f97316", // 경북 - 오렌지
+        "#84cc16", // 경남 - 라임
+        "#a855f7", // 세종 - 보라2
+        "#0ea5e9", // 대전 - 하늘
+        "#dc2626", // 대구 - 빨강2
+        "#2563eb", // 부산 - 파랑2
+        "#059669", // 광주 - 초록2
+        "#ea580c", // 울산 - 주황2
+        "#9333ea", // 제주 - 자주2
     ];
 
     chartInstances["oilChart"] = new Chart(ctx, {
@@ -302,8 +337,13 @@ function createOilChart(data) {
                 label: region,
                 data: data.map((row) => row[region]),
                 borderColor: colors[index],
-                tension: 0.4,
-                borderWidth: region === "전국" ? 3 : 2,
+                backgroundColor: colors[index] + "20", // 20% 투명도
+                borderWidth: 2,
+                pointRadius: 1,
+                pointBorderWidth: 0,
+                pointHoverRadius: 2,
+                tension: 0.3,
+                fill: false,
             })),
         },
         options: getChartOptions("원/L"),
@@ -330,7 +370,11 @@ function createExchangeChart(data) {
                     borderColor: "rgba(59, 130, 246, 1)",
                     backgroundColor: "rgba(59, 130, 246, 0.1)",
                     yAxisID: "y",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
                 {
                     label: "기준금리 (%)",
@@ -338,7 +382,11 @@ function createExchangeChart(data) {
                     borderColor: "#10b981",
                     backgroundColor: "rgba(16, 185, 129, 0.1)",
                     yAxisID: "y1",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
                 {
                     label: "KORIBOR (%)",
@@ -346,47 +394,15 @@ function createExchangeChart(data) {
                     borderColor: "#f59e0b",
                     backgroundColor: "rgba(245, 158, 11, 0.1)",
                     yAxisID: "y1",
-                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 1,
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 2,
+                    tension: 0.3,
                 },
             ],
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: "환율 및 금리 추이 (최근 30일)",
-                    font: { size: 16, weight: "bold" },
-                },
-                legend: {
-                    position: "bottom",
-                },
-            },
-            scales: {
-                y: {
-                    type: "linear",
-                    display: true,
-                    position: "left",
-                    title: {
-                        display: true,
-                        text: "환율 (원/달러)",
-                    },
-                },
-                y1: {
-                    type: "linear",
-                    display: true,
-                    position: "right",
-                    title: {
-                        display: true,
-                        text: "금리 (%)",
-                    },
-                    grid: {
-                        drawOnChartArea: false,
-                    },
-                },
-            },
-        },
+        options: getChartOptions("원/L"),
     });
 }
 
@@ -402,7 +418,7 @@ function createMetalTable(data) {
         <div class="overflow-x-auto">
             
             <div class="text-right">
-                <small class="text-gray-600 text-xs md:text-base italic">단위: 철근(천원/톤), 철근 외(달러/톤)</small>
+                <small class="text-gray-600 text-xs md:text-sm italic">단위: 철근(천원/톤), 철근 외(달러/톤)</small>
             </div>
             <table class="min-w-full bg-white border border-gray-200">
                 <thead class="bg-gray-100">
@@ -459,7 +475,7 @@ function createNonMetalTable(data) {
         <div class="overflow-x-auto">
             
             <div class="text-right">
-                <small class="text-gray-600 text-xs md:text-base italic">단위: 철근(천원/톤), 철근 외(달러/톤)</small>
+                <small class="text-gray-600 text-xs md:text-sm italic">단위: 철근(천원/톤), 철근 외(달러/톤)</small>
             </div>
             <table class="min-w-full bg-white border border-gray-200">
                 <thead class="bg-gray-100">
@@ -517,49 +533,109 @@ function createOilTable(data) {
     const tableContainer = document.getElementById("oil-table");
     if (!tableContainer) return;
 
-    const latestData = getLatestData(data, "일자");
-    if (!latestData) return;
-
-    const regions = [
-        "전국",
-        "서울",
-        "경기",
-        "인천",
-        "강원",
-        "충북",
-        "충남",
-        "전북",
-        "전남",
-        "경북",
-        "경남",
-        "세종",
-        "대전",
-        "대구",
-        "부산",
-        "광주",
-        "울산",
-        "제주",
-    ];
+    const recentData = data.slice().reverse();
 
     let html = `
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="overflow-x-auto">
+            <div class="text-right">
+                <small class="text-gray-600 text-xs md:text-sm italic">단위: 원/리터</small>
+            </div>
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-blue-600">일자</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">전국</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">서울</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">경기</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">인천</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">강원</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">충북</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">충남</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">전북</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">전남</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">경북</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">경남</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">세종</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">대전</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">대구</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">부산</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">광주</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">울산</th>
+                        <th class="px-2 py-2 md:px-4 md:py-3 text-center text-xs md:text-sm font-medium text-gray-600">제주</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
     `;
 
-    regions.forEach((region) => {
-        const price = latestData[region];
+    recentData.forEach((row) => {
         html += `
-            <div class="bg-white p-4 rounded-lg border border-gray-200">
-                <div class="text-sm text-gray-500 mb-1">${region}</div>
-                <div class="text-xl font-bold text-gray-900">${formatNumber(
-                    price
-                )} 원</div>
-            </div>
+            <tr class="hover:bg-gray-50">
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatDate(
+                    row["일자"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["전국"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["서울"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["경기"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["인천"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["강원"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["충북"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["충남"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["전북"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["전남"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["경북"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["경남"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["세종"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["대전"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["대구"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["부산"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["광주"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["울산"]
+                )}</td>
+                <td class="px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm text-center text-gray-900">${formatNumber(
+                    row["제주"]
+                )}</td>
+            </tr>
         `;
     });
 
-    html += `</div><div class="mt-4 text-sm text-gray-500">최종 업데이트: ${formatDate(
-        latestData["일자"]
-    )}</div>`;
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
 
     tableContainer.innerHTML = html;
 }

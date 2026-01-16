@@ -129,6 +129,16 @@ function getChartOptions(yAxisLabel) {
                     text: yAxisLabel,
                 },
             },
+            y1: {
+                beginAtZero: true,
+                position: "right",
+                grid: {
+                    drawOnChartArea: false,
+                },
+                title: {
+                    display: false,
+                },
+            },
             x: {
                 title: {
                     display: false,

@@ -3,8 +3,8 @@ class DateRangeFilter {
     constructor(containerId, options = {}) {
         this.containerId = containerId;
         this.options = {
-            defaultRange: options.defaultRange || "1Y", // '1M', '3M', '6M', '1Y', 'ALL'
-            dataEndDate: options.dataEndDate || null, // 데이터의 최신 날짜 (있으면 이 날짜 기준으로 계산)
+            defaultRange: options.defaultRange || "1Y",
+            dataEndDate: options.dataEndDate || null,
             onFilter: options.onFilter || (() => {}),
             customRanges: options.customRanges || {
                 "3M": { label: "3개월", months: 3 },
@@ -20,6 +20,8 @@ class DateRangeFilter {
         this.customEndDate = null;
 
         this.render();
+        // 초기 렌더링 후 기본 범위 설정
+        this.setRange(this.options.defaultRange);
     }
 
     render() {
@@ -29,57 +31,60 @@ class DateRangeFilter {
         const today = new Date();
         const maxDate = today.toISOString().split("T")[0];
 
+        const rangeCount = Object.keys(this.options.customRanges).length;
+
         let html = `
-            <div class="bg-white rounded-lg shadow-sm p-3 md:p-4 mb-4">
-                <div class="flex flex-col gap-3">
-                    <!-- 기본 범위 버튼 -->
-                    <div class="grid grid-cols-3 md:grid-cols-${
-                        Object.keys(this.options.customRanges).length
-                    } gap-2">
-                        ${Object.entries(this.options.customRanges)
-                            .map(
-                                ([key, range]) => `
-                            <button 
-                                class="date-range-btn px-3 py-2 text-sm rounded-lg border transition-colors
-                                    ${
-                                        this.currentRange === key
-                                            ? "bg-blue-600 text-white border-blue-600"
-                                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                                    }"
-                                data-range="${key}">
-                                ${range.label}
-                            </button>
-                        `
-                            )
-                            .join("")}
+            <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-6">
+                <div class="space-y-4">
+                    <!-- 빠른 선택 버튼 -->
+                    <div>
+                        <label class="block text-sm md:text-base font-medium text-gray-900 mb-2">필터</label>
+                        <div class="grid grid-cols-3 md:grid-cols-${rangeCount} gap-2">
+                            ${Object.entries(this.options.customRanges)
+                                .map(
+                                    ([key, range]) => `
+                                <button 
+                                    class="date-range-btn px-4 py-2.5 text-sm font-medium rounded-lg border-2 transition-all
+                                        ${
+                                            this.currentRange === key
+                                                ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                                                : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                                        }"
+                                    data-range="${key}">
+                                    ${range.label}
+                                </button>
+                            `
+                                )
+                                .join("")}
+                        </div>
                     </div>
                     
-                    <!-- 현재 선택된 기간 표시 -->
-                    <div id="${
-                        this.containerId
-                    }-current-range" class="text-xs text-gray-600 text-center bg-blue-50 rounded px-3 py-2">
-                        조회 기간을 선택해주세요
-                    </div>
-                    
-                    <!-- 커스텀 날짜 선택 -->
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                        <label class="text-sm text-gray-600 whitespace-nowrap sm:mr-2">직접 선택:</label>
-                        <div class="flex items-center gap-2 flex-1">
-                            <input 
-                                type="date" 
-                                id="${this.containerId}-start-date"
-                                class="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                max="${maxDate}">
-                            <span class="text-gray-500">~</span>
-                            <input 
-                                type="date" 
-                                id="${this.containerId}-end-date"
-                                class="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                max="${maxDate}">
+                    <!-- 직접 선택 -->
+                    <div>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <div class="flex-1 flex items-center gap-2">
+                                <input 
+                                    type="date" 
+                                    id="${this.containerId}-start-date"
+                                    class="flex-1 px-3 py-2.5 text-base border-2 border-gray-300 rounded-lg 
+                                           focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    max="${maxDate}"
+                                    placeholder="시작일">
+                                <span class="text-gray-400 font-medium">~</span>
+                                <input 
+                                    type="date" 
+                                    id="${this.containerId}-end-date"
+                                    class="flex-1 px-3 py-2.5 text-base border-2 border-gray-300 rounded-lg 
+                                           focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    max="${maxDate}"
+                                    placeholder="종료일">
+                            </div>
                             <button 
                                 id="${this.containerId}-apply-custom"
-                                class="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap">
-                                적용
+                                class="px-6 py-2.5 text-sm font-medium bg-blue-600 text-white rounded-lg 
+                                       hover:bg-blue-700 active:bg-blue-800 transition-all shadow-sm 
+                                       hover:shadow-md whitespace-nowrap">
+                                조회하기
                             </button>
                         </div>
                     </div>
@@ -133,30 +138,60 @@ class DateRangeFilter {
 
     setRange(rangeKey) {
         this.currentRange = rangeKey;
-        this.customStartDate = null;
-        this.customEndDate = null;
+
+        // 날짜 범위 계산
+        const dateRange = this.calculateDateRange(rangeKey);
 
         // 버튼 활성화 상태 업데이트
         const container = document.getElementById(this.containerId);
         container.querySelectorAll(".date-range-btn").forEach((btn) => {
             if (btn.dataset.range === rangeKey) {
                 btn.className =
-                    "date-range-btn px-3 py-2 text-sm rounded-lg border transition-colors bg-blue-600 text-white border-blue-600";
+                    "date-range-btn px-4 py-2.5 text-sm font-medium rounded-lg border-2 transition-all bg-blue-600 text-white border-blue-600 shadow-md";
             } else {
                 btn.className =
-                    "date-range-btn px-3 py-2 text-sm rounded-lg border transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-50";
+                    "date-range-btn px-4 py-2.5 text-sm font-medium rounded-lg border-2 transition-all bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50";
             }
         });
 
-        // 커스텀 날짜 입력 초기화
-        document.getElementById(`${this.containerId}-start-date`).value = "";
-        document.getElementById(`${this.containerId}-end-date`).value = "";
+        // 날짜 입력 필드에 값 설정
+        const startInput = document.getElementById(
+            `${this.containerId}-start-date`
+        );
+        const endInput = document.getElementById(
+            `${this.containerId}-end-date`
+        );
 
-        // 현재 선택된 기간 표시 업데이트
-        this.updateCurrentRangeDisplay();
+        if (startInput && endInput) {
+            startInput.value = dateRange.startDate.toISOString().split("T")[0];
+            endInput.value = dateRange.endDate.toISOString().split("T")[0];
+        }
 
         // 필터 콜백 실행
-        this.options.onFilter(this.getDateRange());
+        this.options.onFilter(dateRange);
+    }
+
+    calculateDateRange(rangeKey) {
+        // 데이터의 최신 날짜가 지정되어 있으면 그 날짜 기준으로 계산
+        const endDate = this.options.dataEndDate
+            ? new Date(this.options.dataEndDate)
+            : new Date();
+        let startDate = new Date(endDate);
+
+        const rangeConfig = this.options.customRanges[rangeKey];
+
+        if (rangeConfig.months === null) {
+            // 전체 범위
+            startDate = new Date("2011-01-01");
+        } else {
+            startDate.setMonth(startDate.getMonth() - rangeConfig.months);
+        }
+
+        return {
+            startDate,
+            endDate,
+            rangeType: rangeKey,
+        };
     }
 
     applyCustomRange() {
@@ -188,14 +223,15 @@ class DateRangeFilter {
         const container = document.getElementById(this.containerId);
         container.querySelectorAll(".date-range-btn").forEach((btn) => {
             btn.className =
-                "date-range-btn px-3 py-2 text-sm rounded-lg border transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-50";
+                "date-range-btn px-4 py-2.5 text-sm font-medium rounded-lg border-2 transition-all bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50";
         });
 
-        // 현재 선택된 기간 표시 업데이트
-        this.updateCurrentRangeDisplay();
-
         // 필터 콜백 실행
-        this.options.onFilter(this.getDateRange());
+        this.options.onFilter({
+            startDate: new Date(this.customStartDate),
+            endDate: new Date(this.customEndDate),
+            rangeType: "CUSTOM",
+        });
     }
 
     getDateRange() {
@@ -211,40 +247,7 @@ class DateRangeFilter {
             };
         }
 
-        // 데이터의 최신 날짜가 지정되어 있으면 그 날짜 기준으로 계산
-        const endDate = this.options.dataEndDate
-            ? new Date(this.options.dataEndDate)
-            : new Date();
-        let startDate = new Date(endDate);
-
-        const rangeConfig = this.options.customRanges[this.currentRange];
-
-        if (rangeConfig.months === null) {
-            // 전체 범위
-            startDate = new Date("2000-01-01");
-        } else {
-            startDate.setMonth(startDate.getMonth() - rangeConfig.months);
-        }
-
-        return {
-            startDate,
-            endDate,
-            rangeType: this.currentRange,
-        };
-    }
-
-    // 현재 선택된 기간 표시 업데이트
-    updateCurrentRangeDisplay() {
-        const displayElement = document.getElementById(
-            `${this.containerId}-current-range`
-        );
-        if (!displayElement) return;
-
-        const dateRange = this.getDateRange();
-        const startStr = formatDate(dateRange.startDate);
-        const endStr = formatDate(dateRange.endDate);
-
-        displayElement.innerHTML = `📅 조회 기간: <strong>${startStr}</strong> ~ <strong>${endStr}</strong>`;
+        return this.calculateDateRange(this.currentRange);
     }
 
     // 현재 필터 상태 가져오기
@@ -253,6 +256,13 @@ class DateRangeFilter {
             range: this.currentRange,
             dateRange: this.getDateRange(),
         };
+    }
+
+    // 외부에서 데이터 최신 날짜를 업데이트할 수 있는 메서드
+    setDataEndDate(endDate) {
+        this.options.dataEndDate = endDate;
+        // 현재 선택된 범위로 다시 설정
+        this.setRange(this.currentRange);
     }
 }
 

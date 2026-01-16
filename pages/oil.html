@@ -3,126 +3,144 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>유가 정보 - 원자재 가격 모니터링</title>
+        <title>유가 가격 정보 - 원자재 가격 모니터링</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.mini.min.js"></script>
+        <link rel="icon" type="image/svg+xml" href="/images/icon.svg" />
         <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
         <style>
-            @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap");
+            @import url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css");
+
             * {
-                font-family: "Noto Sans KR", sans-serif;
+                font-family: "SUIT", -apple-system, BlinkMacSystemFont,
+                    "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR",
+                    sans-serif;
             }
             .sidebar {
-                background: #2c2c3e;
+                background: rgba(50, 50, 50, 1);
             }
+
             .sidebar-item {
                 transition: all 0.2s ease;
             }
+
             .sidebar-item:hover {
-                background: rgba(102, 126, 234, 0.1);
+                background: rgba(0, 0, 0, 0.1);
             }
+
             .sidebar-item.active {
-                background: #667eea;
+                background: rgba(255, 255, 255, 1);
+                color: rgba(59, 130, 246, 1);
+                font-weight: 600;
             }
         </style>
     </head>
     <body class="bg-gray-100">
         <div class="flex h-screen overflow-hidden">
             <!-- 사이드바 -->
-            <aside class="sidebar w-64 flex-shrink-0 hidden md:block">
+            <aside class="sidebar w-64 flex-shrink-0 hidden 2xl:block">
                 <div class="h-full flex flex-col">
-                    <div class="p-6 border-b border-gray-700">
-                        <h1 class="text-white text-base font-regular">
+                    <div class="p-6">
+                        <h1 class="text-white text-lg font-normal">
                             원자재 가격 모니터링 시스템
                         </h1>
-                    </div>
-                    <nav class="flex-1 p-4 space-y-2">
-                        <a
-                            href="../index.html"
-                            class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
-                        >
-                            <i class="fas fa-home w-5"></i
-                            ><span>종합 대시보드</span>
-                        </a>
-                        <a
-                            href="metals.html"
-                            class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
-                        >
-                            <i class="fas fa-chart-line w-5"></i
-                            ><span>철강 가격 정보</span>
-                        </a>
-                        <a
-                            href="nonmetals.html"
-                            class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
-                        >
-                            <i class="fas fa-industry w-5"></i
-                            ><span>비철금속 가격 정보</span>
-                        </a>
-                        <a
-                            href="oil.html"
-                            class="sidebar-item active flex items-center space-x-3 px-4 py-3 rounded-lg text-white"
-                        >
-                            <i class="fas fa-gas-pump w-5"></i
-                            ><span>유가 정보</span>
-                        </a>
-                        <a
-                            href="exchange.html"
-                            class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
-                        >
-                            <i class="fas fa-dollar-sign w-5"></i
-                            ><span>금융 정보</span>
-                        </a>
-                    </nav>
-                    <div
-                        class="p-4 border-t border-gray-700 text-gray-400 text-xs"
-                    >
-                        <p id="lastUpdate">최종 업데이트: -</p>
+                        <div
+                            class="border-b border-white/20 pb-4 text-center"
+                        ></div>
+
+                        <nav class="flex-1 pt-4 space-y-2">
+                            <a
+                                href="../index.html"
+                                class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
+                            >
+                                <span class="material-icons-round nav-icon"
+                                    >home</span
+                                >
+                                <span>종합 대시보드</span>
+                            </a>
+                            <a
+                                href="metals.html"
+                                class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
+                            >
+                                <span class="material-icons-round nav-icon"
+                                    >show_chart</span
+                                >
+                                <span>철강 가격 정보</span>
+                            </a>
+                            <a
+                                href="nonmetals.html"
+                                class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
+                            >
+                                <span class="material-icons-round nav-icon"
+                                    >factory</span
+                                >
+                                <span>비철금속 가격 정보</span>
+                            </a>
+                            <a
+                                href="oil.html"
+                                class="sidebar-item active flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
+                            >
+                                <span class="material-icons-round nav-icon"
+                                    >local_gas_station</span
+                                >
+                                <span>유가 정보</span>
+                            </a>
+                            <a
+                                href="exchange.html"
+                                class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300"
+                            >
+                                <span class="material-icons-round nav-icon"
+                                    >payments</span
+                                >
+                                <span>금융 정보</span>
+                            </a>
+                        </nav>
                     </div>
                 </div>
             </aside>
 
             <!-- 메인 컨텐츠 -->
             <main class="flex-1 overflow-y-auto pb-20 md:pb-0">
-                <div class="md:hidden bg-white border-b border-gray-200 p-4">
-                    <h1 class="text-lg font-bold text-gray-800">유가 정보</h1>
-                </div>
-
-                <div class="p-6 md:p-8">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">
-                            유가 정보
+                <div class="p-6">
+                    <div class="mb-3 md:mb-6">
+                        <h2
+                            class="text-base md:text-2xl font-bold text-gray-800"
+                        >
+                            유가 가격 정보
                         </h2>
-                        <p class="text-gray-500 text-sm mt-1">
-                            전국 및 지역별 경유 가격 (최근 30일)
+                        <p class="text-gray-500 text-sm md:text-base mt-1">
+                            전국 및 지역별 경유 가격
                         </p>
                     </div>
 
+                    <!-- 날짜 필터 -->
+                    <div id="oil-date-filter"></div>
+
                     <!-- 차트 -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                            지역별 경유 가격 추이
-                        </h3>
+                    <div class="bg-white rounded-lg shadow-sm p-3 md:p-6 mb-6">
                         <div style="height: 400px">
                             <canvas id="oilChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- 지역별 최신 가격 -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <div class="flex justify-between items-center mb-4">
+                    <!-- 데이터 테이블 -->
+                    <div class="bg-white rounded-lg shadow-sm p-3 md:p-6">
+                        <div
+                            class="flex justify-between items-center mb-2 md:mb-4"
+                        >
                             <h3 class="text-lg font-semibold text-gray-800">
-                                지역별 최신 가격
+                                최근 데이터
                             </h3>
                             <button
-                                onclick="downloadDataAsExcel('daily_oil_data.csv')"
-                                class="px-4 py-2 bg-[#217346] hover:bg-[#1e6a3f] text-white rounded-lg text-sm"
+                                id="download-oil-excel"
+                                class="px-2 md:px-4 py-2 bg-[#217346] hover:bg-[#1e6a3f] text-white rounded-lg text-sm text-center"
                             >
-                                <i class="fas fa-download mr-2"></i>CSV 다운로드
+                                Excel 다운로드
                             </button>
                         </div>
                         <div id="oil-table"></div>
@@ -133,63 +151,57 @@
 
         <!-- 모바일 하단 네비게이션 -->
         <nav
-            class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2"
+            class="2xl:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2"
         >
             <div class="flex justify-around">
                 <a
                     href="../index.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-home text-xl"></i
-                    ><span class="text-xs mt-1">홈</span>
+                    <span class="material-icons-round">home</span>
+                    <span class="text-xs mt-1">홈</span>
                 </a>
                 <a
                     href="metals.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-chart-line text-xl"></i
-                    ><span class="text-xs mt-1">철강</span>
+                    <span class="material-icons-round">show_chart</span>
+                    <span class="text-xs mt-1">철강</span>
                 </a>
                 <a
                     href="nonmetals.html"
                     class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-industry text-xl"></i
-                    ><span class="text-xs mt-1">비철금속</span>
+                    <span class="material-icons-round">factory</span>
+                    <span class="text-xs mt-1">비철금속</span>
                 </a>
                 <a
                     href="oil.html"
-                    class="flex flex-col items-center py-2 text-purple-600"
+                    class="flex flex-col items-center py-2 text-blue-600"
                 >
-                    <i class="fas fa-gas-pump text-xl"></i
-                    ><span class="text-xs mt-1">유가</span>
+                    <span class="material-icons-round">local_gas_station</span>
+                    <span class="text-xs mt-1">유가</span>
                 </a>
                 <a
                     href="exchange.html"
-                    class="flex flex-col items-center py-2 text-purple-600"
+                    class="flex flex-col items-center py-2 text-gray-400"
                 >
-                    <i class="fas fa-dollar-sign text-xl"></i
-                    ><span class="text-xs mt-1">금융</span>
+                    <span class="material-icons-round">payments</span>
+                    <span class="text-xs mt-1">금융</span>
                 </a>
             </div>
         </nav>
 
+        <!-- 공통 JS 파일들 -->
         <script src="../js/main.js"></script>
         <script src="../js/data-loader.js"></script>
+        <script src="../js/excel-download.js"></script>
         <script src="../js/charts.js"></script>
-        <script>
-            function downloadCSV(filename) {
-                const link = document.createElement("a");
-                link.href = `../data/${filename}`;
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
 
-            window.addEventListener("DOMContentLoaded", async () => {
-                await loadOilData();
-            });
-        </script>
+        <!-- 날짜 필터 공통 -->
+        <script src="../js/date-filter.js"></script>
+
+        <!-- 페이지 전용 필터 -->
+        <script src="../js/oil-filter.js"></script>
     </body>
 </html>

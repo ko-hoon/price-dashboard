@@ -1,4 +1,13 @@
 async function drawOilMap() {
+    const container = document.getElementById("oil-map");
+    if (!container) {
+        console.error("oil-map 컨테이너를 찾을 수 없습니다!");
+        return;
+    }
+
+    // 로딩 인디케이터 표시
+    showMapLoading(container);
+
     try {
         // GeoJSON 파일과 유가 CSV 파일 동시 로드
         const [geoData, csvText] = await Promise.all([
@@ -61,12 +70,6 @@ async function drawOilMap() {
         }
 
         // SVG 설정
-        const container = document.getElementById("oil-map");
-        if (!container) {
-            console.error("oil-map 컨테이너를 찾을 수 없습니다!");
-            return;
-        }
-
         const width = container.clientWidth;
         const isMobile = window.innerWidth < 768;
         const height = isMobile ? width * 1 : width * 1;
@@ -74,7 +77,7 @@ async function drawOilMap() {
         // 컨테이너 높이 설정
         container.style.height = height + "px";
 
-        // 기존 SVG 제거
+        // 기존 내용 제거 (로딩 인디케이터 포함)
         d3.select("#oil-map").selectAll("*").remove();
 
         const svg = d3
@@ -84,7 +87,8 @@ async function drawOilMap() {
             .attr("height", "100%")
             .attr("viewBox", `0 0 ${width} ${height}`)
             .attr("preserveAspectRatio", "xMidYMid meet")
-            .style("background", "#ffffff");
+            .style("background", "#ffffff")
+            .style("opacity", "0"); // 초기에는 투명
 
         // 투영 설정 (한국 중심) - 반응형
         const projection = d3
@@ -115,7 +119,7 @@ async function drawOilMap() {
                 .style("backdrop-filter", "blur(4px)");
         }
 
-        // 지도 그리기 - GPU 가속 활성화
+        // 지도 그리기
         svg.style("will-change", "transform");
 
         const mapGroup = svg.append("g");
@@ -134,7 +138,7 @@ async function drawOilMap() {
             .attr("stroke", "#dddddd")
             .attr("stroke-width", 1)
             .style("cursor", "pointer")
-            .style("transition", "opacity 0.15s ease") // CSS transition 사용
+            .style("transition", "opacity 0.15s ease")
             .on("mouseenter", function (event, d) {
                 const name = d.properties.name;
                 const price = oilPriceData[name];
@@ -142,10 +146,8 @@ async function drawOilMap() {
                     ? (((price - avgPrice) / avgPrice) * 100).toFixed(2)
                     : "N/A";
 
-                // opacity는 CSS로 처리
                 this.style.opacity = "0.7";
 
-                // 툴팁 위치 계산
                 const tooltipWidth = 200;
                 const isRightSide = event.pageX > window.innerWidth / 2;
                 const leftPos = isRightSide
@@ -171,19 +173,64 @@ async function drawOilMap() {
                 this.style.opacity = "1";
                 tooltip.style("visibility", "hidden");
             });
+
+        // 지도 렌더링 완료 후 페이드 인
+        requestAnimationFrame(() => {
+            svg.transition().duration(300).style("opacity", "1");
+        });
     } catch (error) {
         console.error("지도 로드 실패:", error);
-        const container = document.getElementById("oil-map");
-        if (container) {
-            container.innerHTML =
-                '<div class="flex items-center justify-center h-full text-gray-400">지도 데이터를 불러올 수 없습니다: ' +
-                error.message +
-                "</div>";
-        }
+        hideMapLoading(container);
+        container.innerHTML =
+            '<div class="flex items-center justify-center h-full text-gray-400">지도 데이터를 불러올 수 없습니다: ' +
+            error.message +
+            "</div>";
     }
 }
 
-// 리사이즈 최적화 - debounce 시간 증가 및 리사이즈 중 플래그 설정
+// 로딩 인디케이터 표시 함수
+function showMapLoading(container) {
+    const loadingHTML = `
+        <div class="map-loading-container" style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 300px;
+        ">
+            <div class="map-spinner" style="
+                width: 48px;
+                height: 48px;
+                border: 4px solid #e5e7eb;
+                border-top-color: #3b82f6;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            "></div>
+            <p style="
+                margin-top: 16px;
+                color: #6b7280;
+                font-size: 14px;
+            ">지도 데이터를 불러오는 중...</p>
+        </div>
+        <style>
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        </style>
+    `;
+    container.innerHTML = loadingHTML;
+}
+
+// 로딩 인디케이터 제거 함수
+function hideMapLoading(container) {
+    const loadingContainer = container.querySelector(".map-loading-container");
+    if (loadingContainer) {
+        loadingContainer.remove();
+    }
+}
+
+// 리사이즈 최적화
 let resizeTimer;
 let isResizing = false;
 
@@ -194,7 +241,7 @@ window.addEventListener("resize", () => {
     resizeTimer = setTimeout(() => {
         drawOilMap();
         isResizing = false;
-    }, 250); // 250ms로 증가
+    }, 250);
 });
 
 // 스크롤 성능 최적화를 위한 passive 리스너
