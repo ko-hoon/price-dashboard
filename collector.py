@@ -336,6 +336,9 @@ def main():
             formatted_today,
         )
     print("check")
+    print(write_file_path)
+    print(oil_price_filename)
+    print(formatted_today)
     if date_today_duplicate_check(write_file_path, oil_price_filename, formatted_today):
         print("check")
         opinet_oil(
