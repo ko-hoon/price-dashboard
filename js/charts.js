@@ -1,6 +1,7 @@
 // 차트 생성 함수들
 
 let chartInstances = {};
+window.chartInstances = chartInstances; // 👈 이 줄 추가
 
 // 기존 차트 제거
 function destroyChart(chartId) {

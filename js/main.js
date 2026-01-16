@@ -4,6 +4,42 @@ const BASE_PATH =
         ? ""
         : "/price-dashboard";
 
+// 모바일에서 차트 외부 터치시 모든 툴팁 숨기기
+if (isMobile()) {
+    document.addEventListener(
+        "touchstart",
+        function (e) {
+            // 차트 컨테이너들의 ID 목록
+            const chartContainerIds = [
+                "nonmetalChart",
+                "metalChart",
+                "oilChart",
+                "exchangeChart",
+                "exchangeTrendChart",
+                "metalTrendChart",
+            ];
+
+            // 터치한 곳이 어떤 차트 영역인지 확인
+            const touchedChart = chartContainerIds.some((chartId) => {
+                const chartElement = document.getElementById(chartId);
+                return chartElement && chartElement.contains(e.target);
+            });
+
+            // 차트 외부를 터치한 경우, 모든 차트의 툴팁 숨기기
+            if (!touchedChart && window.chartInstances) {
+                Object.keys(window.chartInstances).forEach((chartId) => {
+                    const chart = window.chartInstances[chartId];
+                    if (chart && chart.tooltip) {
+                        chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                        chart.update("none");
+                    }
+                });
+            }
+        },
+        { passive: true }
+    );
+}
+
 // 숫자 포맷팅 (천 단위 콤마)
 function formatNumber(num) {
     if (!num) return "-";
@@ -103,10 +139,7 @@ const CHART_COLORS = {
 
 // 차트 기본 옵션
 function getChartOptions(yAxisLabel) {
-    const isMobile =
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-        );
+    const isMobileDevice = isMobile();
     return {
         responsive: true,
         maintainAspectRatio: false,
@@ -161,8 +194,8 @@ function getChartOptions(yAxisLabel) {
             axis: "x",
             intersect: false,
         },
-        ...(isMobile && {
-            events: ["click", "touchstart"], // PC는 mousemove 포함, 모바일은 터치만
+        ...(isMobileDevice && {
+            events: ["click", "touchstart"],
         }),
     };
 }
