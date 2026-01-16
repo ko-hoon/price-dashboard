@@ -644,7 +644,7 @@ function createExchangeTable(data) {
     const tableContainer = document.getElementById("exchange-table");
     if (!tableContainer) return;
 
-    const recentData = data.slice(-10).reverse();
+    const recentData = data.slice().reverse();
 
     let html = `
         <div class="overflow-x-auto">
