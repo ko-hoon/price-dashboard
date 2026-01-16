@@ -38,7 +38,7 @@ jobs:
                   GH_TOKEN: ${{ secrets.GH_TOKEN }}
                   LME_PRICE_BOARD_URL: ${{ secrets.LME_PRICE_BOARD_URL }}
                   LME_PRICE_LIST_URL: ${{ secrets.LME_PRICE_LIST_URL }}
-              run: python main.py
+              run: python collector.py
 
             - name: Check for changes
               id: git-status
