@@ -93,11 +93,11 @@ const CHART_COLORS = {
     danger: "#ef4444",
     warning: "#f59e0b",
     info: "#3b82f6",
-    copper: "#b87333",
-    aluminum: "#a8a9ad",
-    zinc: "#7f8c8d",
-    lead: "#2c3e50",
-    nickel: "#95a5a6",
+    copper: "#3c83f6",
+    aluminum: "#10b981",
+    zinc: "#f59e0b",
+    lead: "#ef4444",
+    nickel: "#764ba2",
     tin: "#c0c0c0",
 };
 
