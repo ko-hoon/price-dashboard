@@ -18,8 +18,8 @@ import re
 KOREA_BANK_API_KEY = "VH5HVPX7V38DUY6Y35OZ"
 OPINET_API_KEY = "F260116063"
 PUBLIC_DATA_CENTER_API_KEY = "OOCJbRX4ng%2FOUZs9PphW5mStymTHtN%2BmQp6gdj3OIDrl3jdYADTKdjm%2BhFLD%2FE2bhrkIoubjnnS8nJoA9P44NQ%3D%3D"
-LME_PRICE_BOARD_URL = "https://www.pps.go.kr/bichuk/bbs/view.do"
-LME_PRICE_LIST_URL = "https://www.pps.go.kr/bichuk/bbs/list.do"
+LME_PRICE_BOARD_URL = "https://www.pps.go.kr/bichuk/bbs/list.do"
+LME_PRICE_LIST_URL = "https://www.pps.go.kr/bichuk/bbs/view.do"
 
 
 
