@@ -34,8 +34,8 @@ jobs:
               env:
                   KOREA_BANK_API_KEY: ${{ secrets.KOREA_BANK_API_KEY }}
                   OPINET_API_KEY: ${{ secrets.OPINET_API_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   PUBLIC_DATA_CENTER_API_KEY: ${{ secrets.PUBLIC_DATA_CENTER_API_KEY }}
-                  GH_TOKEN: ${{ secrets.GH_TOKEN }}
                   LME_PRICE_BOARD_URL: ${{ secrets.LME_PRICE_BOARD_URL }}
                   LME_PRICE_LIST_URL: ${{ secrets.LME_PRICE_LIST_URL }}
               run: python collector.py
