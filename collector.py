@@ -238,65 +238,6 @@ def write_to_csv_file_metal(file_path, file_name, data):
     except Exception as e:
         print(f"CSV 파일 쓰기 중 에러 발생: {e}")
 
-
-# Git 저장소에서 최신 정보 가져오기
-def git_pull(repo_path):
-    # 작업 디렉토리를 Git 저장소 디렉토리로 변경
-    os.chdir(repo_path)
-
-    # 최신 정보 가져오기
-    subprocess.run(["git", "pull"], check=True)
-    print("Git 저장소에서 최신 정보 가져오기 완료")
-
-
-# Git 저장소에 변경 사항 커밋 및 푸쉬
-def git_commit_and_push(repo_path, commit_message):
-    try:
-        # 작업 디렉토리를 Git 저장소 디렉토리로 변경
-        os.chdir(repo_path)
-
-        # 변경 사항 확인
-        status_output = (
-            subprocess.check_output(["git", "status", "--porcelain"]).decode().strip()
-        )
-        if status_output:
-            subprocess.run(["git", "config", "user.name", "ko-hoon"], check=True)
-            subprocess.run(
-                ["git", "config", "user.email", "seunghoon_jeon@kolon.com"], check=True
-            )
-            subprocess.run(["git", "add", "."], check=True)
-            subprocess.run(["git", "commit", "-m", commit_message], check=True)
-
-            # 환경 변수에서 GH_TOKEN을 가져옴
-            token = os.getenv("GH_TOKEN")
-            if not token:
-                raise Exception("GH_TOKEN이 설정되지 않았습니다.")
-
-            # 리모트 URL에 토큰 추가 (origin 대신 실제 리모트 이름을 사용)
-            remote_url = (
-                subprocess.check_output(["git", "config", "--get", "remote.origin.url"])
-                .decode()
-                .strip()
-            )
-            token_url = remote_url.replace("https://", f"https://{token}@")
-
-            # 리모트 URL 업데이트
-            subprocess.run(
-                ["git", "remote", "set-url", "origin", token_url], check=True
-            )
-            subprocess.run(["git", "push"], check=True)
-            print("변경 사항을 Git 저장소에 커밋 및 푸쉬 완료")
-        else:
-            print("변경 사항이 없어 커밋 및 푸쉬를 생략합니다.")
-    except subprocess.CalledProcessError as e:
-        if "nothing to commit, working tree clean" in str(e.output):
-            print("변경 사항이 없어 커밋 및 푸쉬를 생략합니다.")
-        else:
-            print(f"Git 커밋 및 푸쉬 중 에러 발생: {e}")
-    except Exception as e:
-        print(f"Git 작업 중 에러 발생: {e}")
-
-
 # 메인 함수
 def main():
     # 데이터 파일 경로 및 파일명 지정
@@ -341,9 +282,6 @@ def main():
     write_to_csv_file_metal(
         write_file_path, metal_price_filename, data["metal_price"][::-1]
     )
-
-    # 변경 사항을 Git 저장소에 커밋 및 푸쉬
-    git_commit_and_push(repo_path, f"데이터 업데이트: {formatted_today}")
 
 
 if __name__ == "__main__":

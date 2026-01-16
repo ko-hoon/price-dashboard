@@ -1,53 +1,42 @@
-name: Run Collector Python script
+name: Daily Data Update
 
 on:
     schedule:
         - cron: "50 2 * * *"
-    workflow_dispatch: # 수동 트리거
+    workflow_dispatch:
 
 jobs:
-    run-script:
+    update-data:
         runs-on: ubuntu-latest
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
               with:
-                  ref: main
+                  token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Set up Python
-              uses: actions/setup-python@v2
+              uses: actions/setup-python@v4
               with:
-                  python-version: "3.12"
+                  python-version: "3.x"
 
             - name: Install dependencies
               run: |
-                  python -m pip install --upgrade pip
                   pip install requests beautifulsoup4
 
-            - name: Configure Git
-              run: |
-                  git config --global user.name 'ko-hoon'
-                  git config --global user.email 'seunghoon_jeon@kolon.com'
-
-            - name: Run Python script
+            - name: Run data collection script
               env:
                   KOREA_BANK_API_KEY: ${{ secrets.KOREA_BANK_API_KEY }}
                   OPINET_API_KEY: ${{ secrets.OPINET_API_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   PUBLIC_DATA_CENTER_API_KEY: ${{ secrets.PUBLIC_DATA_CENTER_API_KEY }}
                   LME_PRICE_BOARD_URL: ${{ secrets.LME_PRICE_BOARD_URL }}
                   LME_PRICE_LIST_URL: ${{ secrets.LME_PRICE_LIST_URL }}
-              run: python collector.py
-
-            - name: Check for changes
-              id: git-status
               run: |
-                  git add .
-                  echo "::set-output name=changes::$(git status --porcelain)"
+                  python your_script_name.py
 
             - name: Commit and push if changes
-              if: steps.git-status.outputs.changes != ''
               run: |
-                  git commit -m "Update data from collector script [skip ci]"
-                  git push
+                  git config user.name "ko-hoon"
+                  git config user.email "seunghoon_jeon@kolon.com"
+                  git add .
+                  git diff --quiet && git diff --staged --quiet || (git commit -m "데이터 업데이트: $(date +'%Y-%m-%d')" && git push)
