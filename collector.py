@@ -335,6 +335,7 @@ def main():
             data["dollar_won_rate"],
             formatted_today,
         )
+    print("check")
     if date_today_duplicate_check(write_file_path, oil_price_filename, formatted_today):
         print("check")
         opinet_oil(
