@@ -103,6 +103,10 @@ const CHART_COLORS = {
 
 // 차트 기본 옵션
 function getChartOptions(yAxisLabel) {
+    const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+        );
     return {
         responsive: true,
         maintainAspectRatio: false,
@@ -119,6 +123,7 @@ function getChartOptions(yAxisLabel) {
             tooltip: {
                 mode: "index",
                 intersect: false,
+                enabled: true,
             },
         },
         scales: {
@@ -156,6 +161,9 @@ function getChartOptions(yAxisLabel) {
             axis: "x",
             intersect: false,
         },
+        ...(isMobile && {
+            events: ["click", "touchstart"], // PC는 mousemove 포함, 모바일은 터치만
+        }),
     };
 }
 
