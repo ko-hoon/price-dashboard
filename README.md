@@ -55,7 +55,7 @@ price-dashboard/
 
 ## 📅 자동 업데이트
 
-GitHub Actions를 통해 **매일 오전 11시(KST)**에 자동으로 데이터가 업데이트됩니다.
+GitHub Actions를 통해 **매일 오전 11시(KST)** 에 자동으로 데이터가 업데이트됩니다.
 
 ## 📝 라이선스
 
